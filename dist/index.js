@@ -35772,7 +35772,7 @@ const TICK = "`";
 async function generateTableLines(octokit, { owner, repo, basehead, includeMergeCommits, shaLength, }) {
     const lines = [];
     for await (const response of octokit.paginate.iterator(octokit.rest.repos.compareCommitsWithBasehead, { owner, repo, basehead })) {
-        const commits = response.data;
+        const { commits } = response.data;
         for (const { sha: commitSha, html_url: shaUrl, parents, commit: { message }, } of commits) {
             if (includeMergeCommits || parents.length < 2) {
                 const sha = commitSha.slice(0, shaLength);

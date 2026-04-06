@@ -32,12 +32,14 @@ async function generateTableLines(
     octokit.rest.repos.compareCommitsWithBasehead,
     { owner, repo, basehead },
   )) {
-    const commits = response.data as unknown as {
-      sha: string;
-      html_url: string;
-      parents: { sha: string }[];
-      commit: { message: string };
-    }[];
+    const { commits } = response.data as unknown as {
+      commits: {
+        sha: string;
+        html_url: string;
+        parents: { sha: string }[];
+        commit: { message: string };
+      }[];
+    };
     for (const {
       sha: commitSha,
       html_url: shaUrl,
