@@ -26,6 +26,10 @@ inputs:
     required: false
     description: "Print the generated Markdown table to the console"
     default: "false"
+  max-output-length:
+    required: false
+    description: "Maximum character length of the differences output. The table is truncated to fit within this limit to avoid 'Argument list too long' errors."
+    default: "65536"
 outputs:
   differences:
     description: "A markdown formatted table of differences between two commits"

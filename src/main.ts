@@ -82,6 +82,9 @@ async function run(): Promise<void> {
     const verbose: boolean = JSON.parse(
       core.getInput("verbose", { required: false }),
     );
+    const maxOutputLength: number = JSON.parse(
+      core.getInput("max-output-length", { required: false }),
+    );
 
     const lines = await generateTableLines(octokit, {
       owner,
@@ -90,7 +93,46 @@ async function run(): Promise<void> {
       includeMergeCommits,
       shaLength,
     });
-    const table = markdownTable(lines.reverse());
+    // reverse so the header row (last element) becomes the first row
+    const reversedLines = lines.reverse();
+    const totalCommits = reversedLines.length - 1; // exclude header row
+
+    let table = markdownTable(reversedLines);
+
+    if (table.length > maxOutputLength) {
+      core.warning(
+        `Output table is ${table.length} characters, ` +
+          `exceeding max-output-length of ` +
+          `${maxOutputLength}. Truncating.`,
+      );
+
+      // Binary search for the max number of rows that fit within the limit
+      let lo = 1; // at minimum keep the header row
+      let hi = reversedLines.length;
+      while (lo < hi) {
+        const mid = Math.ceil((lo + hi) / 2);
+        const slice = reversedLines.slice(0, mid);
+        const omitted = totalCommits - (mid - 1);
+        const suffix =
+          omitted > 0
+            ? `\n\n*... and ${omitted} more commit${omitted === 1 ? "" : "s"} (truncated)*`
+            : "";
+        const candidate = markdownTable(slice) + suffix;
+        if (candidate.length <= maxOutputLength) {
+          lo = mid;
+        } else {
+          hi = mid - 1;
+        }
+      }
+
+      const finalSlice = reversedLines.slice(0, lo);
+      const omitted = totalCommits - (lo - 1);
+      const suffix =
+        omitted > 0
+          ? `\n\n*... and ${omitted} more commit${omitted === 1 ? "" : "s"} (truncated)*`
+          : "";
+      table = markdownTable(finalSlice) + suffix;
+    }
 
     if (verbose) {
       core.startGroup("Markdown table output"); // eslint-disable-line i18n-text/no-en
