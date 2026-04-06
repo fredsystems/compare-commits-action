@@ -28,12 +28,16 @@ async function generateTableLines(
 ): Promise<string[][]> {
   const lines = [];
 
-  for await (const {
-    data: { commits },
-  } of octokit.paginate.iterator(
-    octokit.rest.repos.compareCommitsWithBasehead, // eslint-disable-line indent
-    { owner, repo, basehead }, // eslint-disable-line indent
-  )) /* eslint-disable-line indent */ {
+  for await (const response of octokit.paginate.iterator(
+    octokit.rest.repos.compareCommitsWithBasehead,
+    { owner, repo, basehead },
+  )) {
+    const commits = response.data as unknown as {
+      sha: string;
+      html_url: string;
+      parents: { sha: string }[];
+      commit: { message: string };
+    }[];
     for (const {
       sha: commitSha,
       html_url: shaUrl,

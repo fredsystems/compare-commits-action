@@ -60,11 +60,12 @@
             fd
             git
             nixpkgs-fmt
-            nodejs_20
+            nodejs_24
             shellcheck
             shfmt
             statix
             taplo
+            npm-check
           ];
 
           # npm forces output that can't possibly be useful to stdout so redirect

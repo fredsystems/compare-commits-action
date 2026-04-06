@@ -1,89 +1,36 @@
 name: CI
+
 on:
-  push:
-    branches:
-      - main
   pull_request:
-    branches:
-      - main
+  merge_group:
 
 concurrency:
-  group: ${{ github.repository }}-${{ github.head_ref || github.sha }}-${{ github.workflow }}
+  group: ${{ github.workflow }}-${{ github.head_ref || github.run_id }}
   cancel-in-progress: true
-
 jobs:
-  build:
+  build-and-check:
     runs-on: ubuntu-latest
+
     steps:
-      - uses: actions/checkout@v4
-
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 20
-
-      - run: npm install
-      - run: npm run build
-      - run: npm run format-check
-      - run: npm run lint
-      - run: npm run package
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        verbose:
-          - true
-          - false
-        include-merge-commits:
-          - true
-          - false
-        repo:
-          - owner: NixOS
-            repo: nixpkgs
-            basehead: cc455c004a60e1d65a0fb86ad6cc76168c6bb4d5...67c80531be622641b5b2ccc3a7aff355cb02476b
-          - owner: nix-community
-            repo: home-manager
-            basehead: b0d769691cc379c9ab91d3acec5d14e75c02c02b...59be1f4983ee3689de3172716a6c7e95a6a37bb7
-          - owner: nix-community
-            repo: home-manager
-            basehead: 0b197562ab7bf114dd5f6716f41d4b5be6ccd357...2f40cd05dc0ffe3ba69a94e9e76e0357c5b9a0b8
-    steps:
-      - uses: actions/checkout@v4
-
-      - name: test
-        uses: ./
-        with:
-          owner: ${{ matrix.repo.owner }}
-          repo: ${{ matrix.repo.repo }}
-          basehead: ${{ matrix.repo.basehead }}
-          token: ${{ secrets.GITHUB_TOKEN }}
-          verbose: ${{ matrix.verbose }}
-          include-merge-commits: ${{ matrix.include-merge-commits }}
-  release:
-    runs-on: ubuntu-latest
-    needs:
-      - build
-      - test
-    steps:
-      - uses: actions/create-github-app-token@v2.0.6
-        id: generate_token
-        with:
-          app-id: ${{ secrets.APP_ID }}
-          private-key: ${{ secrets.APP_PRIVATE_KEY }}
-
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6
         with:
           fetch-depth: 0
-          token: ${{ steps.generate_token.outputs.token }}
 
-      - uses: actions/setup-node@v4
+      # --- Install Nix via Determinate Systems ---
+      - name: Set up Determinate Nix
+        uses: DeterminateSystems/determinate-nix-action@1361e7900eb437fb341f0f226e8fbd9a0d8284fa # v3
+
+      - name: Use Determinate Cache
+        uses: DeterminateSystems/magic-nix-cache-action@565684385bcd71bad329742eefe8d12f2e765b39 # v13
         with:
-          node-version: 20
+          use-flakehub: false
+          use-gha-cache: false
 
-      - run: npm ci
-      - run: npm install
-      - run: npm run build
-      - run: npm run package
-
-      - run: npx semantic-release
-        env:
-          GITHUB_TOKEN: ${{ steps.generate_token.outputs.token }}
+      # --- Enter your flake's devShell (same behavior as direnv) ---
+      - name: Run checks in devShell
+        run: |
+          nix develop --impure --command bash -e -c '
+            set -euxo pipefail
+            pre-commit run --all-files
+          '

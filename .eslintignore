@@ -1,5 +1,0 @@
-dist/
-lib/
-node_modules/
-**/*.test.ts
-*.config.ts
