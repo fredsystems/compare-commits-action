@@ -33,14 +33,14 @@
 
               prettier = {
                 enable = true;
-                entry = mkForce "${pkgs.nodejs_20}/bin/npm run format";
+                entry = mkForce "${pkgs.nodejs_24}/bin/npm run format";
                 types_or = [ "json" "yaml" "ts" ];
                 excludes = [ "package-lock\\.json" ];
               };
 
               eslint = {
                 enable = true;
-                entry = mkForce "${pkgs.nodejs_20}/bin/npm run lint";
+                entry = mkForce "${pkgs.nodejs_24}/bin/npm run lint";
                 types = [ "ts" ];
               };
 
