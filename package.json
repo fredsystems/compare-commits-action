@@ -34,6 +34,7 @@
     "tunnel": "0.0.6"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@semantic-release/changelog": "7.0.0",
     "@semantic-release/commit-analyzer": "13.0.1",
     "@semantic-release/git": "11.0.1",
@@ -44,7 +45,7 @@
     "@typescript-eslint/eslint-plugin": "8.65.0",
     "@typescript-eslint/parser": "8.65.0",
     "@vercel/ncc": "0.44.1",
-    "eslint": "9.39.5",
+    "eslint": "^10.8.0",
     "eslint-plugin-github": "6.1.2",
     "js-yaml": "5.2.2",
     "prettier": "3.9.6",
