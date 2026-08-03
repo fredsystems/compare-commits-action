@@ -1,6 +1,6 @@
 {
   "name": "compare-commits-action",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "private": true,
   "description": "Compare the differences between two commits",
   "main": "lib/main.js",
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cpcloud/compare-commits-action.git"
+    "url": "git+https://github.com/fredsystems/compare-commits-action.git"
   },
   "keywords": [
     "actions",
@@ -25,7 +25,7 @@
     "commits",
     "octokit"
   ],
-  "author": "Phillip Cloud <417981+cpcloud@users.noreply.github.com>",
+  "author": "Phillip Cloud <417981+cpcloud@users.noreply.github.com>, Fred Clausen",
   "license": "MIT",
   "dependencies": {
     "@actions/core": "3.0.1",
@@ -34,7 +34,7 @@
     "tunnel": "0.0.6"
   },
   "devDependencies": {
-    "@eslint/js": "^10.0.1",
+    "@eslint/js": "10.0.1",
     "@semantic-release/changelog": "7.0.0",
     "@semantic-release/commit-analyzer": "13.0.1",
     "@semantic-release/git": "11.0.1",
@@ -45,7 +45,7 @@
     "@typescript-eslint/eslint-plugin": "8.65.0",
     "@typescript-eslint/parser": "8.65.0",
     "@vercel/ncc": "0.44.1",
-    "eslint": "^10.8.0",
+    "eslint": "10.8.0",
     "eslint-plugin-github": "6.1.2",
     "js-yaml": "5.2.2",
     "prettier": "3.9.6",
