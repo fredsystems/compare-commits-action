@@ -8,7 +8,7 @@
     "build": "tsc",
     "format": "prettier --write .",
     "format-check": "prettier --check .",
-    "package": "ncc build --no-source-map-register --license licenses.txt --target es2019",
+    "package": "ncc build --source-map --no-source-map-register --license licenses.txt --target es2019",
     "all": "npm run build && npm run format-check && npm run package"
   },
   "repository": {
