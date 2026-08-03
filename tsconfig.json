@@ -6,7 +6,7 @@
     "rootDir": "./src",
     "target": "es2019",
     "module": "es2020",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "sourceMap": true,
     "experimentalDecorators": true,
     "pretty": true,
@@ -14,7 +14,6 @@
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "noEmitOnError": false,
-    "noImplicitUseStrict": false,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "skipLibCheck": true

@@ -35842,14 +35842,14 @@ async function run() {
             table = markdownTable(finalSlice) + suffix;
         }
         if (verbose) {
-            startGroup("Markdown table output"); // eslint-disable-line i18n-text/no-en
+            startGroup("Markdown table output");
             info(table);
             endGroup();
         }
         setOutput("differences", table);
     }
     catch (error) {
-        setFailed(`Action failed with error: ${error}`); // eslint-disable-line i18n-text/no-en
+        setFailed(`Action failed with error: ${error}`);
     }
 }
 run();
@@ -35859,3 +35859,4 @@ run();
 module.exports = __webpack_exports__;
 /******/ })()
 ;
+//# sourceMappingURL=index.js.map

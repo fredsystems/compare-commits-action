@@ -1,6 +1,6 @@
 {
   "name": "compare-commits-action",
-  "version": "6.0.2",
+  "version": "6.0.3",
   "private": true,
   "description": "Compare the differences between two commits",
   "main": "lib/main.js",
@@ -8,13 +8,12 @@
     "build": "tsc",
     "format": "prettier --write .",
     "format-check": "prettier --check .",
-    "lint": "eslint .",
-    "package": "ncc build --no-source-map-register --license licenses.txt --target es2019",
-    "all": "npm run build && npm run format-check && npm run lint && npm run package"
+    "package": "ncc build --source-map --no-source-map-register --license licenses.txt --target es2019",
+    "all": "npm run build && npm run format-check && npm run package"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cpcloud/compare-commits-action.git"
+    "url": "git+https://github.com/fredsystems/compare-commits-action.git"
   },
   "keywords": [
     "actions",
@@ -25,31 +24,26 @@
     "commits",
     "octokit"
   ],
-  "author": "Phillip Cloud <417981+cpcloud@users.noreply.github.com>",
+  "author": "Phillip Cloud <417981+cpcloud@users.noreply.github.com>, Fred Clausen",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "3.0.0",
+    "@actions/core": "3.0.1",
     "@octokit/rest": "22.0.1",
     "markdown-table": "3.0.4",
     "tunnel": "0.0.6"
   },
   "devDependencies": {
-    "@semantic-release/changelog": "6.0.3",
+    "@semantic-release/changelog": "7.0.0",
     "@semantic-release/commit-analyzer": "13.0.1",
-    "@semantic-release/git": "10.0.1",
+    "@semantic-release/git": "11.0.1",
     "@semantic-release/npm": "13.1.5",
-    "@semantic-release/release-notes-generator": "14.1.0",
-    "@types/eslint": "9.6.1",
-    "@types/node": "25.5.2",
-    "@typescript-eslint/eslint-plugin": "8.58.0",
-    "@typescript-eslint/parser": "8.58.0",
-    "@vercel/ncc": "0.38.4",
-    "eslint": "9.39.4",
-    "eslint-plugin-github": "6.0.0",
-    "js-yaml": "4.1.1",
-    "prettier": "3.8.1",
-    "semantic-release": "25.0.3",
-    "typescript": "6.0.2"
+    "@semantic-release/release-notes-generator": "14.1.1",
+    "@types/node": "25.9.5",
+    "@vercel/ncc": "0.44.1",
+    "js-yaml": "5.2.2",
+    "prettier": "3.9.6",
+    "semantic-release": "25.0.8",
+    "typescript": "7.0.2"
   },
   "release": {
     "branches": [

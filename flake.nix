@@ -6,74 +6,65 @@
 
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable-small";
 
-    pre-commit-hooks = {
-      url = "github:cachix/pre-commit-hooks.nix";
-      inputs = {
-        nixpkgs.follows = "nixpkgs";
-        flake-utils.follows = "flake-utils";
-      };
+    precommit-base = {
+      url = "github:fredsystems/pre-commit-checks";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
   };
 
-  outputs = { self, nixpkgs, flake-utils, pre-commit-hooks }:
-    flake-utils.lib.eachDefaultSystem (system:
+  outputs =
+    {
+      nixpkgs,
+      flake-utils,
+      precommit-base,
+      ...
+    }:
+    flake-utils.lib.eachDefaultSystem (
+      system:
       let
         pkgs = nixpkgs.legacyPackages.${system};
-        inherit (pkgs.lib) mkForce;
+
+        precommitCheck = precommit-base.lib.mkCheck {
+          inherit system;
+          src = ./.;
+
+          extraExcludes = [
+            "^dist/"
+            "^CHANGELOG\\.md$"
+          ];
+
+          check_javascript = true;
+          javascript = {
+            enableBiome = true;
+            enableTsc = true;
+            tsConfig = "tsconfig.json";
+          };
+        };
       in
       {
         checks = {
-          pre-commit-check = pre-commit-hooks.lib.${system}.run {
-            src = ./.;
-            hooks = {
-              nixpkgs-fmt.enable = true;
-              shellcheck.enable = true;
-              statix.enable = true;
-              taplo.enable = true;
-
-              prettier = {
-                enable = true;
-                entry = mkForce "${pkgs.nodejs_20}/bin/npm run format";
-                types_or = [ "json" "yaml" "ts" ];
-                excludes = [ "package-lock\\.json" ];
-              };
-
-              eslint = {
-                enable = true;
-                entry = mkForce "${pkgs.nodejs_20}/bin/npm run lint";
-                types = [ "ts" ];
-              };
-
-              shfmt = {
-                enable = true;
-                entry = mkForce "${pkgs.shfmt}/bin/shfmt -i 2 -sr -d -s -l";
-                files = "\\.sh$";
-              };
-            };
-
-          };
+          pre-commit-check = precommitCheck;
         };
 
         devShell = pkgs.mkShell {
           name = "compare-commits-action";
-          buildInputs = with pkgs; [
-            fd
-            git
-            nixpkgs-fmt
-            nodejs_24
-            shellcheck
-            shfmt
-            statix
-            taplo
-            npm-check
-          ];
+          buildInputs =
+            precommitCheck.enabledPackages
+            ++ (with pkgs; [
+              typescript-go
+              fd
+              git
+              nodejs_24
+              npm-check
+            ]);
 
           # npm forces output that can't possibly be useful to stdout so redirect
           # stdout to stderr
           shellHook = ''
-            ${self.checks.${system}.pre-commit-check.shellHook}
+            ${precommitCheck.shellHook}
             npm install --no-fund 1>&2
           '';
         };
-      });
+      }
+    );
 }
