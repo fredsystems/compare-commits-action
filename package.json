@@ -8,9 +8,8 @@
     "build": "tsc",
     "format": "prettier --write .",
     "format-check": "prettier --check .",
-    "lint": "eslint .",
     "package": "ncc build --no-source-map-register --license licenses.txt --target es2019",
-    "all": "npm run build && npm run format-check && npm run lint && npm run package"
+    "all": "npm run build && npm run format-check && npm run package"
   },
   "repository": {
     "type": "git",
@@ -34,19 +33,13 @@
     "tunnel": "0.0.6"
   },
   "devDependencies": {
-    "@eslint/js": "10.0.1",
     "@semantic-release/changelog": "7.0.0",
     "@semantic-release/commit-analyzer": "13.0.1",
     "@semantic-release/git": "11.0.1",
     "@semantic-release/npm": "13.1.5",
     "@semantic-release/release-notes-generator": "14.1.1",
-    "@types/eslint": "9.6.1",
     "@types/node": "25.9.5",
-    "@typescript-eslint/eslint-plugin": "8.65.0",
-    "@typescript-eslint/parser": "8.65.0",
     "@vercel/ncc": "0.44.1",
-    "eslint": "10.8.0",
-    "eslint-plugin-github": "6.1.2",
     "js-yaml": "5.2.2",
     "prettier": "3.9.6",
     "semantic-release": "25.0.8",

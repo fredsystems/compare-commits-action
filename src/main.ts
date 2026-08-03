@@ -135,14 +135,14 @@ async function run(): Promise<void> {
     }
 
     if (verbose) {
-      core.startGroup("Markdown table output"); // eslint-disable-line i18n-text/no-en
+      core.startGroup("Markdown table output");
       core.info(table);
       core.endGroup();
     }
 
     core.setOutput("differences", table);
   } catch (error) {
-    core.setFailed(`Action failed with error: ${error}`); // eslint-disable-line i18n-text/no-en
+    core.setFailed(`Action failed with error: ${error}`);
   }
 }
 
