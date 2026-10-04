@@ -39,7 +39,7 @@
     "@semantic-release/npm": "13.2.0",
     "@semantic-release/release-notes-generator": "14.1.1",
     "@types/node": "25.9.8",
-    "@vercel/ncc": "0.44.1",
+    "@vercel/ncc": "0.45.0",
     "js-yaml": "5.4.2",
     "prettier": "3.9.9",
     "semantic-release": "25.0.9",
